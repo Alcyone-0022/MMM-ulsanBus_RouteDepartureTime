@@ -1,0 +1,65 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400&display=swap');
+
+.ulsanBus_Container {
+  height: 100%;
+  width: 440px;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 500;
+  text-align: left;
+  font-size: 20px;
+  display: table-cell;
+  vertical-align: middle;
+  position: relative;
+}
+
+#busstop_title {
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  margin: -5px 0px -5px 0px;
+}
+
+#arrives_soon {
+	font-size: 17px;
+	font-weight: bold;
+	line-height: normal;
+	width: 180px;
+	color: #ff5733;
+	word-break: break-word;
+ 	margin-top: 10px;
+}
+
+#arrivalRouteElem {
+	font-size: 15px;
+	/* font-weight: bold; */
+	font-weight: 400;
+	line-height: 100%;
+	display: inline-block;
+}
+
+#briefArrivalRouteElem {
+	font-size: 14px;
+	width: 25%;
+	/* font-weight: bold; */
+	line-height: normal;
+	word-wrap: break-word;
+	display: inherit;
+}
+
+.box {
+  float: left;
+  /* border: 1px solid grey; */
+  width: 190px;
+  height: 95%;
+  padding-right: 5px;
+  /* display: inline; */
+  vertical-align: bottom;
+}
+
+.box_vertical {
+  float: left;
+  flex-direction: column;
+  border: 1px solid grey;
+  width: 200px;
+}
