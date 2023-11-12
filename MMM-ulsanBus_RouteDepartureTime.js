@@ -1,6 +1,5 @@
 Module.register("MMM-ulsanBus_RouteDepartureTime", {
     defaults: {
-		routes: [],
 		updateInterval: 30000,
 		busStopUpdateInterval: 10000,
 		isVacation: false,
@@ -9,34 +8,40 @@ Module.register("MMM-ulsanBus_RouteDepartureTime", {
         var self = this;
         Log.log("Starting module: " + this.name);
 
-
     },
     getStyles: function() {
         return ["ulsanBus_RouteDepartureTime.css"];
     },
     getDom: function() {
         // var self = this;
-
         var container = document.createElement("div");
         container.className = "UB_RteDepTime_Container";
+        Log.log(container);
         return container;
     },
     notificationReceived: function(notification, payload) {
         var self = this;
         switch (notification) {
             case "DOM_OBJECTS_CREATED":
-                console.log("RouteDPTime_DOMLoaded")
-                this.sendSocketNotification("ROUTEDEPARTURETIME_MODULE_READY", this.key)
-                this.routes.forEach(function(routeNM) {
-                    this.sendSocketNotification("TIMETABLE_REQ", [key, routeNM, this.isVacation]);
-                })
+                Log.log("RouteDPTime_DOMLoaded")
+                self.sendSocketNotification("ROUTEDEPARTURETIME_MODULE_READY", self.config.key)
         }
     },
     socketNotificationReceived: function(notification, payload) {
         var self = this;
         switch (notification) {
+            case "ROUTEDEPARTURETIME_NODEHELPER_READY":
+                
+                Log.log("ROUTEDEPARTURETIME_NODEHELPER_READY");
+
+                self.config.routes.forEach(function(routeNM) {
+                    Log.log("Requested route departure time: " + routeNM.toString());
+                    self.sendSocketNotification("TIMETABLE_REQ", [self.config.key, routeNM, self.config.isVacation]);
+                })
+                break;
             case "TIMETABLE_RECV":
-                console.log(payload);
+                Log.log(payload);
+                break;
 		}
     },
 })

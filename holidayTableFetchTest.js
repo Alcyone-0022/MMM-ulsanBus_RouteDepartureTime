@@ -44,7 +44,7 @@ let holidays = {};
 
 // parse xml to json first.
 parser.parseString(xml, function(err, result) {
-    console.log(result.response.body[0].items[0].item);
+    console.log(result.response.body[0].items[0]);
     parsedData = result.response.body[0].items[0].item;
 })
 

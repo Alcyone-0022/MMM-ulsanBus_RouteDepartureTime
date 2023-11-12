@@ -1,5 +1,5 @@
 var NodeHelper = require("node_helper");
-const fetch = import("node-fetch");
+const fetch = require("node-fetch");
 const xml2js = require("xml2js");
 const moment = require("moment");
 
@@ -13,27 +13,32 @@ module.exports = NodeHelper.create({
 		switch(notification){
 			case 'ROUTEDEPARTURETIME_MODULE_READY':
 				// when module loaded completely, get holiday information
-				this.getHolidayTable(payload[0]);
+				console.log("ROUTEDEPARTURETIME_MODULE_READY");
+				holidays = await this.getHolidayTable(payload)
+					.then(this.sendSocketNotification("ROUTEDEPARTURETIME_NODEHELPER_READY"));
+				break;
 			case 'TIMETABLE_REQ':
-				this.sendSocketNotification('TIMETABLE_RECV', await this.getTimeTable(payload[0], payload[1], payload[2]));
+				let obj = await this.getTimeTable(payload[0], payload[1], payload[2]);
+				this.sendSocketNotification('TIMETABLE_RECV', obj);
+				break;
 		}
 	},
 	async getHolidayTable(key){
 		let url = 'http://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/getRestDeInfo'
-		let queryParams = '?' + encodeURIComponent('ServiceKey') + '=' + key; /*Service Key*/
+		let queryParams = '?' + encodeURIComponent('ServiceKey') + '=' + encodeURIComponent(key); /*Service Key*/
 		queryParams += '&' + encodeURIComponent('solYear') + '=' + encodeURIComponent(moment().get('year')); /**/
-		queryParams += '&' + encodeURIComponent('solMonth') + '=' + encodeURIComponent(moment().get('month')); /**/
+		queryParams += '&' + encodeURIComponent('solMonth') + '=' + encodeURIComponent(moment().get('month') + 1); /**/
 
-		let obj = null;
+		// console.log(url + queryParams)
+
 		try {
-			obj = await (await fetch(url + queryParams));
+			let response = await fetch(url + queryParams);
+			let data = await response.text();
+			return this.parseHoliday(data);
 		} catch(e) {
-			obj = {'Error': 'Error in fetching holiday table'};
+			// obj = {'Error': 'Error in fetching holiday table'};
+			return {'Error': 'Error in fetching holiday table' + e};
 		}
-
-		holidays = parseHoliday(obj);
-
-		return obj;
 	},
 	parseHoliday: function(xml) {
 		let parsedData;
@@ -41,15 +46,15 @@ module.exports = NodeHelper.create({
 
 		// parse xml to json first.
 		parser.parseString(xml, function(err, result) {
-			console.log(result.response.body[0].items[0].item);
 			parsedData = result.response.body[0].items[0].item;
-		})
-
-		// process json to get holidays
-		parsedData.forEach(function(val) {
-			if (val.isHoliday[0] == 'Y') {
-				holidays[val.locdate[0]] = [];
-				holidays[val.locdate[0]] = val.dateName[0];
+			if (parsedData !== undefined) {
+				// process json to get holidays
+				parsedData.forEach(function(val) {
+					if (val.isHoliday[0] == 'Y') {
+						holidays[val.locdate[0]] = [];
+						holidays[val.locdate[0]] = val.dateName[0];
+					}
+				})
 			}
 		})
 
@@ -69,7 +74,6 @@ module.exports = NodeHelper.create({
 
 		// parse xml to json first.
 		parser.parseString(xml, function(err, result) {
-			// console.log(result.tableInfo.list[0].row);
 			parsedData = result.tableInfo.list[0].row;
 		})
 
@@ -106,7 +110,7 @@ module.exports = NodeHelper.create({
 	},
 	async getTimeTable(key, routeNumber, isVacation){
 		let url = 'http://openapi.its.ulsan.kr/UlsanAPI/BusTimetable.xo'
-		let queryParams = '?' + encodeURIComponent('ServiceKey') + '=' + key; /*Service Key*/
+		let queryParams = '?' + encodeURIComponent('ServiceKey') + '=' + encodeURIComponent(key); /*Service Key*/
 		queryParams += '&' + encodeURIComponent('numOfRows') + '=' + encodeURIComponent('300'); /**/
 		queryParams += '&' + encodeURIComponent('routeNo') + '=' + encodeURIComponent(routeNumber); /**/
 
@@ -135,13 +139,19 @@ module.exports = NodeHelper.create({
 		}
 
 		queryParams += '&' + encodeURIComponent('dayOfWeek') + '=' + encodeURIComponent(dayType); /**/
-		let obj = null;
+
+		// console.log(url + queryParams)
+		
+		// let obj = null;
 		try {
-			obj = await (await fetch(url + queryParams));
+			let response = await fetch(url + queryParams);
+			let data = await response.text();
+			return this.parseTimeTable(data);
 		} catch(e) {
-			obj = {'Error': 'Error in fetching data'};
+			// obj = {'Error': 'Error in fetching data'};
+			return {'Error': 'Error in fetching data: ' + e };
 		}
 
-		return this.parseTimeTable(obj);
+		// return this.parseTimeTable(obj);
 	},
 });
