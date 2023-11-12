@@ -1,4 +1,4 @@
-Module.register("MMM-ulsanBus", {
+Module.register("MMM-ulsanBus_RouteDepartureTime", {
     defaults: {
 		busstop: {},
 		updateInterval: 30000,
