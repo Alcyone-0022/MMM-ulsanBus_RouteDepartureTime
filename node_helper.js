@@ -1,5 +1,5 @@
 var NodeHelper = require("node_helper");
-const fetch = require("node-fetch");
+const fetch = import("node-fetch");
 const xml2js = require("xml2js");
 const moment = require("moment");
 
