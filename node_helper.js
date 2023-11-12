@@ -9,13 +9,13 @@ var holidays = {};
 module.exports = NodeHelper.create({
 	start: function () {},
 	notificationReceived: function() {},
-	socketNotificationReceived: function(notification, payload) {
+	socketNotificationReceived: async function(notification, payload) {
 		switch(notification){
 			case 'ROUTEDEPARTURETIME_MODULE_READY':
 				// when module loaded completely, get holiday information
 				this.getHolidayTable(payload[0]);
 			case 'TIMETABLE_REQ':
-				this.getTimeTable(payload[0], payload[1], payload[2]);
+				this.sendSocketNotification('TIMETABLE_RECV', await this.getTimeTable(payload[0], payload[1], payload[2]));
 		}
 	},
 	async getHolidayTable(key){
@@ -141,7 +141,7 @@ module.exports = NodeHelper.create({
 		} catch(e) {
 			obj = {'Error': 'Error in fetching data'};
 		}
-		this.sendSocketNotification('TIMETABLE_RECV', this.parseTimeTable(obj));
-		return obj;
+
+		return this.parseTimeTable(obj);
 	},
 });
