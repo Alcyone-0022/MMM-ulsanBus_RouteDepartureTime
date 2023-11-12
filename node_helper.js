@@ -29,14 +29,11 @@ module.exports = NodeHelper.create({
 		queryParams += '&' + encodeURIComponent('solYear') + '=' + encodeURIComponent(moment().get('year')); /**/
 		queryParams += '&' + encodeURIComponent('solMonth') + '=' + encodeURIComponent(moment().get('month') + 1); /**/
 
-		// console.log(url + queryParams)
-
 		try {
 			let response = await fetch(url + queryParams);
 			let data = await response.text();
 			return this.parseHoliday(data);
 		} catch(e) {
-			// obj = {'Error': 'Error in fetching holiday table'};
 			return {'Error': 'Error in fetching holiday table' + e};
 		}
 	},
@@ -140,18 +137,12 @@ module.exports = NodeHelper.create({
 
 		queryParams += '&' + encodeURIComponent('dayOfWeek') + '=' + encodeURIComponent(dayType); /**/
 
-		// console.log(url + queryParams)
-		
-		// let obj = null;
 		try {
 			let response = await fetch(url + queryParams);
 			let data = await response.text();
 			return this.parseTimeTable(data);
 		} catch(e) {
-			// obj = {'Error': 'Error in fetching data'};
 			return {'Error': 'Error in fetching data: ' + e };
 		}
-
-		// return this.parseTimeTable(obj);
 	},
 });
