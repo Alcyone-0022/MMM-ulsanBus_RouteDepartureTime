@@ -4,7 +4,7 @@ MM2 module displays ulsan bus information.
 ![ulsanBus.png](/ulsanBus.PNG)         
 
 https://www.data.go.kr/tcs/dss/selectApiDataDetailView.do?publicDataPk=15052669   
-울산광역시 BIS 정보 API를 이용한 울산 버스정보 모듈입니다.
+울산광역시 BIS 정보 API를 이용한 울산 버스 출발시간 표시 모듈입니다.
 
 ## Embedding MMM-ulsanBus
 ``` JS
@@ -40,12 +40,4 @@ modules: [
 **maxDisplayRoute** : MM2에 표시할 정류장 당 최대 노선 개수(설정값을 초과할 시 **노선**과 **도착시간**만 간략하게 표시)   
 **maxDisplayBusStops** : MM2에 표시할 최대 동시 표시 정류장 개수   
 **key** : 울산광역시 BIS 정보 API 인증키
-   
-   
-## Dependency
 
-**python 3.7 이상**   
-**ElementTree python 라이브러리**   
-```
-#pip install xml.etree.ElementTree
-```
