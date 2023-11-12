@@ -69,9 +69,31 @@ module.exports = NodeHelper.create({
 		queryParams += '&' + encodeURIComponent('numOfRows') + '=' + encodeURIComponent('300'); /**/
 		queryParams += '&' + encodeURIComponent('routeNo') + '=' + encodeURIComponent(routeNumber); /**/
 
-		/* TODO : check holiday|weekend | holiday|weekend && in vacation | normal day | normal vacation day */
+		/* check holiday|weekend | holiday|weekend && in vacation | normal day | normal vacation day */
+		//0: 평일 1: 토요일 2: 주말,공휴일 3: 방학(평일) 4: 방학(토요일) 5: 방학(일요일)
+		// moment().day() -> 6: SAT 0:SUN
+		let dayType = 0;
+		if (isVacation && moment().day() == 0) {
+			// in vacation & Sunday
+			dayType = 5
+		} else if(isVacation && moment().day() == 6) {
+			// in vacation && Saturday
+			dayType = 4;
+		} else if (isVacation && moment().day() < 6 && moment().day() > 0) {
+			// in vacation && normal day
+			dayType = 3;
+		} else if (this.isHoliday() || moment().day() == 0) {
+			// holiday or weekend
+			dayType = 2;
+		} else if (moment().day() == 6) {
+			// Normal Saturday
+			dayType = 1;
+		} else {
+			// normal day
+			dayType = 0;
+		}
 
-		queryParams += '&' + encodeURIComponent('dayOfWeek') + '=' + encodeURIComponent(dayOfWeek); /**/
+		queryParams += '&' + encodeURIComponent('dayOfWeek') + '=' + encodeURIComponent(dayType); /**/
 		let obj = null;
 		try {
 			obj = await (await fetch(url + queryParams));
