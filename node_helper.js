@@ -3,20 +3,39 @@ const fetch = require("node-fetch");
 const xml2js = require("xml2js");
 const moment = require("moment");
 
+var parser = new xml2js.Parser();
+var holidays = {};
+
 module.exports = NodeHelper.create({
 	start: function () {},
 	notificationReceived: function() {},
 	socketNotificationReceived: function(notification, payload) {
 		switch(notification){
+			case 'ROUTEDEPARTURETIME_MODULE_READY':
+				// when module loaded completely, get holiday information
+				this.getHolidayTable(payload[0]);
 			case 'TIMETABLE_REQ':
 				this.getTimeTable(payload[0], payload[1], payload[2]);
 		}
 	},
+	async getHolidayTable(key){
+		let url = 'http://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/getRestDeInfo'
+		let queryParams = '?' + encodeURIComponent('ServiceKey') + '=' + key; /*Service Key*/
+		queryParams += '&' + encodeURIComponent('solYear') + '=' + encodeURIComponent(moment().year(year)); /**/
+		queryParams += '&' + encodeURIComponent('solMonth') + '=' + encodeURIComponent(moment().year(year).month(month)); /**/
+
+		let obj = null;
+		try {
+			obj = await (await fetch(url + queryParams)).json();
+		} catch(e) {
+			obj = {'Error': 'Error in fetching holiday table'};
+		}
+		return obj;
+	},
 	async getTimeTable(key, routeNumber, isVacation){
-		// https://stackoverflow.com/questions/12460378/how-to-get-json-from-url-in-javascript (14 참고)
-		var url = 'http://openapi.its.ulsan.kr/UlsanAPI/BusTimetable.xo'
-		var queryParams = '?' + encodeURIComponent('ServiceKey') + '=' + key; /*Service Key*/
-		queryParams += '&' + encodeURIComponent('numOfRows') + '=' + encodeURIComponent('200'); /**/
+		let url = 'http://openapi.its.ulsan.kr/UlsanAPI/BusTimetable.xo'
+		let queryParams = '?' + encodeURIComponent('ServiceKey') + '=' + key; /*Service Key*/
+		queryParams += '&' + encodeURIComponent('numOfRows') + '=' + encodeURIComponent('300'); /**/
 		queryParams += '&' + encodeURIComponent('routeNo') + '=' + encodeURIComponent(routeNumber); /**/
 
 		/* TODO : check holiday|weekend | holiday|weekend && in vacation | normal day | normal vacation day */
@@ -30,6 +49,9 @@ module.exports = NodeHelper.create({
 		}
 		this.sendSocketNotification('TIMETABLE_RECV', obj);
 		return obj;
+	},
+	isHoliday: function() {
+		
 	},
 	parseTimeTable: function (xml) {
 		let routes = {};
