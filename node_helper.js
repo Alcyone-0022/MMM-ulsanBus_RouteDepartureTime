@@ -26,7 +26,7 @@ module.exports = NodeHelper.create({
 
 		let obj = null;
 		try {
-			obj = await (await fetch(url + queryParams)).json();
+			obj = await (await fetch(url + queryParams));
 		} catch(e) {
 			obj = {'Error': 'Error in fetching holiday table'};
 		}
@@ -43,7 +43,7 @@ module.exports = NodeHelper.create({
 		queryParams += '&' + encodeURIComponent('dayOfWeek') + '=' + encodeURIComponent(dayOfWeek); /**/
 		let obj = null;
 		try {
-			obj = await (await fetch(url + queryParams)).json();
+			obj = await (await fetch(url + queryParams));
 		} catch(e) {
 			obj = {'Error': 'Error in fetching data'};
 		}
