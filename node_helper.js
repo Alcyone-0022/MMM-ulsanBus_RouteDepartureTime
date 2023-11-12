@@ -41,8 +41,8 @@ module.exports = NodeHelper.create({
 	async getHolidayTable(key){
 		let url = 'http://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/getRestDeInfo'
 		let queryParams = '?' + encodeURIComponent('ServiceKey') + '=' + key; /*Service Key*/
-		queryParams += '&' + encodeURIComponent('solYear') + '=' + encodeURIComponent(moment().year(year)); /**/
-		queryParams += '&' + encodeURIComponent('solMonth') + '=' + encodeURIComponent(moment().year(year).month(month)); /**/
+		queryParams += '&' + encodeURIComponent('solYear') + '=' + encodeURIComponent(moment().get('year')); /**/
+		queryParams += '&' + encodeURIComponent('solMonth') + '=' + encodeURIComponent(moment().get('month')); /**/
 
 		let obj = null;
 		try {
@@ -52,8 +52,16 @@ module.exports = NodeHelper.create({
 		}
 
 		holidays = parseHoliday(obj);
-		
+
 		return obj;
+	},
+	isHoliday: function() {
+		let nowDate = moment().get('year').toString() + moment().get('month').toString() + moment().get('date').toString();
+		if (Object.hasOwn(holidays, nowDate)) {
+			return true;
+		} else {
+			return false;
+		}
 	},
 	async getTimeTable(key, routeNumber, isVacation){
 		let url = 'http://openapi.its.ulsan.kr/UlsanAPI/BusTimetable.xo'
@@ -72,9 +80,6 @@ module.exports = NodeHelper.create({
 		}
 		this.sendSocketNotification('TIMETABLE_RECV', obj);
 		return obj;
-	},
-	isHoliday: function() {
-		
 	},
 	parseTimeTable: function (xml) {
 		let routes = {};
