@@ -18,6 +18,26 @@ module.exports = NodeHelper.create({
 				this.getTimeTable(payload[0], payload[1], payload[2]);
 		}
 	},
+	parseHoliday: function(xml) {
+		let parsedData;
+		let holidays = {};
+
+		// parse xml to json first.
+		parser.parseString(xml, function(err, result) {
+			console.log(result.response.body[0].items[0].item);
+			parsedData = result.response.body[0].items[0].item;
+		})
+
+		// process json to get holidays
+		parsedData.forEach(function(val) {
+			if (val.isHoliday[0] == 'Y') {
+				holidays[val.locdate[0]] = [];
+				holidays[val.locdate[0]] = val.dateName[0];
+			}
+		})
+
+		return holidays;
+	},
 	async getHolidayTable(key){
 		let url = 'http://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/getRestDeInfo'
 		let queryParams = '?' + encodeURIComponent('ServiceKey') + '=' + key; /*Service Key*/
@@ -30,6 +50,9 @@ module.exports = NodeHelper.create({
 		} catch(e) {
 			obj = {'Error': 'Error in fetching holiday table'};
 		}
+
+		holidays = parseHoliday(obj);
+		
 		return obj;
 	},
 	async getTimeTable(key, routeNumber, isVacation){
