@@ -23,7 +23,10 @@ Module.register("MMM-ulsanBus_RouteDepartureTime", {
         var self = this;
         switch (notification) {
             case "DOM_OBJECTS_CREATED":
-                self.sendSocketNotification("TIMETABLE_REQ", self.config.key)
+                self.config.routes.forEach(function(routeNM) {
+                    Log.log("Requested route departure time: " + routeNM.toString());
+                    self.sendSocketNotification("TIMETABLE_REQ", [self.config.key, routeNM, self.config.isVacation]);
+                })
                 break;
             case "CLOCK_MINUTE":
                 // 가장 최근 버스 출발시간과 현재 분을 비교해서 다음 시간 업데이트 여부 판독
@@ -34,15 +37,6 @@ Module.register("MMM-ulsanBus_RouteDepartureTime", {
     socketNotificationReceived: function(notification, payload) {
         var self = this;
         switch (notification) {
-            case "ROUTEDEPARTURETIME_NODEHELPER_READY":
-                
-                Log.log("ROUTEDEPARTURETIME_NODEHELPER_READY");
-
-                self.config.routes.forEach(function(routeNM) {
-                    Log.log("Requested route departure time: " + routeNM.toString());
-                    self.sendSocketNotification("TIMETABLE_REQ", [self.config.key, routeNM, self.config.isVacation]);
-                })
-                break;
             case "TIMETABLE_RECV":
                 Log.log(payload);
                 break;
