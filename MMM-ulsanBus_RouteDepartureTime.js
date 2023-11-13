@@ -23,7 +23,7 @@ Module.register("MMM-ulsanBus_RouteDepartureTime", {
         var self = this;
         switch (notification) {
             case "DOM_OBJECTS_CREATED":
-                self.sendSocketNotification("ROUTEDEPARTURETIME_MODULE_READY", self.config.key)
+                self.sendSocketNotification("TIMETABLE_REQ", self.config.key)
                 break;
             case "CLOCK_MINUTE":
                 // 가장 최근 버스 출발시간과 현재 분을 비교해서 다음 시간 업데이트 여부 판독
