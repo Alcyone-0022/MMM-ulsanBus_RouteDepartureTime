@@ -25,6 +25,9 @@ Module.register("MMM-ulsanBus_RouteDepartureTime", {
             case "DOM_OBJECTS_CREATED":
                 self.sendSocketNotification("ROUTEDEPARTURETIME_MODULE_READY", self.config.key)
                 break;
+            case "CLOCK_MINUTE":
+                Log.log(payload);
+                break;
         }
     },
     socketNotificationReceived: function(notification, payload) {
