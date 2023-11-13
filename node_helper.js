@@ -18,6 +18,8 @@ module.exports = NodeHelper.create({
 					.then(this.sendSocketNotification("ROUTEDEPARTURETIME_NODEHELPER_READY"));
 				break;
 			case 'TIMETABLE_REQ':
+				// 그냥 전체 timetable 넘겨버리고 선택해서 사용하는 건 브라우저 사이드에서 처리하면
+				// 여기서 holiday 업데이트도 하면 될 것
 				let obj = await this.getTimeTable(payload[0], payload[1], payload[2]);
 				this.sendSocketNotification('TIMETABLE_RECV', obj);
 				break;
