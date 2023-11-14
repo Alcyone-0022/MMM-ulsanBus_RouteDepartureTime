@@ -7,6 +7,7 @@ Module.register("MMM-ulsanBus_RouteDepartureTime", {
     start: function() {
         var self = this;
         Log.log("Starting module: " + this.name);
+        this.routeTimeTables = {};
 
     },
     getStyles: function() {
@@ -30,7 +31,7 @@ Module.register("MMM-ulsanBus_RouteDepartureTime", {
                 break;
             case "CLOCK_MINUTE":
                 // 가장 최근 버스 출발시간과 현재 분을 비교해서 다음 시간 업데이트 여부 판독
-                // 막차 이후일 때 - 배열 길이가 1일 때에는? 내일까지 남은 시간만큼 setTimeout 설정하고, 트리거 시 해당 노선 TIMETABLE_REQ
+                // 막차 이후일 때 - 내일까지 남은 시간만큼 setTimeout 설정하고, 트리거 시 해당 노선 TIMETABLE_REQ
                 break;
         }
     },
@@ -38,7 +39,10 @@ Module.register("MMM-ulsanBus_RouteDepartureTime", {
         var self = this;
         switch (notification) {
             case "TIMETABLE_RECV":
-                Log.log(payload);
+                for (route in payload) {
+                    this.routeTimeTables[route] = payload[route];
+                }
+                Log.log(this.routeTimeTables);
                 break;
 		}
     },
