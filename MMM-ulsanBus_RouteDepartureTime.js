@@ -8,6 +8,8 @@ Module.register("MMM-ulsanBus_RouteDepartureTime", {
         var self = this;
         Log.log("Starting module: " + this.name);
         this.routeTimeTables = {};
+        // route time tables that is displayed now
+        this.currentTimeTables = {};
     },
     getStyles: function() {
         return ["ulsanBus_RouteDepartureTime.css"];
@@ -30,7 +32,7 @@ Module.register("MMM-ulsanBus_RouteDepartureTime", {
 
 
                 self.departuretimeCheckTimer = setInterval( function() {
-                    self.checkRouteTime(self.getTimesFromNow(self.routeTimeTables, 3));
+                    self.checkRouteTime(self.currentTimeTables);
                 }, 5000);
                 break;
             case "CLOCK_MINUTE":
@@ -93,7 +95,8 @@ Module.register("MMM-ulsanBus_RouteDepartureTime", {
         }
 
         if (isTimePassed) {
-            this.updateRouteTimeDOM(this.getTimesFromNow(this.routeTimeTables, 3));
+            this.currentTimeTables = this.getTimesFromNow(this.routeTimeTables, 3);
+            this.updateRouteTimeDOM(this.currentTimeTables);
         }
     },
     buildRouteTimeDOM: function() {
@@ -110,8 +113,8 @@ Module.register("MMM-ulsanBus_RouteDepartureTime", {
                 for (route in payload) {
                     this.routeTimeTables[route] = payload[route];
                 }
-                // Log.log(this.routeTimeTables);
-                this.updateRouteTimeDOM(this.getTimesFromNow(this.routeTimeTables, 3));
+                this.currentTimeTables = this.getTimesFromNow(this.routeTimeTables, 3);
+                this.updateRouteTimeDOM(this.currentTimeTables);
                 break;
 		}
     },
