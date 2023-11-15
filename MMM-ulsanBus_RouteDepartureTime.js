@@ -84,7 +84,6 @@ Module.register("MMM-ulsanBus_RouteDepartureTime", {
         // this function checks any bus route departure times that is over
         // if so, update routeTimeTablesToDisplay and call updateRouteTimeDOM function
         Log.log("checkRouteTime called.");
-        Log.log(timetables)
         let isTimePassed = false;
         for (route in timetables) {
             Log.log(moment().isSameOrAfter(moment(timetables[route][0], "HHmm")))
@@ -104,7 +103,7 @@ Module.register("MMM-ulsanBus_RouteDepartureTime", {
     },
     updateRouteTimeDOM: function(timetables) {
         Log.log("updateRouteTimeDOM called.");
-        Log.log(timetables);
+        // Log.log(timetables);
     },
     socketNotificationReceived: function(notification, payload) {
         var self = this;
