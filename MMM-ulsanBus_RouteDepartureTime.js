@@ -29,6 +29,8 @@ Module.register("MMM-ulsanBus_RouteDepartureTime", {
                     Log.log("Requested route departure time: " + routeNM.toString());
                     self.sendSocketNotification("TIMETABLE_REQ", [self.config.key, routeNM, self.config.isVacation]);
                 })
+
+                setInterval(this.checkRouteTime(this.routeTimeTables), 1000);
                 break;
             case "CLOCK_MINUTE":
                 // 가장 최근 버스 출발시간과 현재 분을 비교해서 다음 시간 업데이트 여부 판독
@@ -72,23 +74,30 @@ Module.register("MMM-ulsanBus_RouteDepartureTime", {
 				}
 			})
         }
-        Log.log(timetablesFromNow)
+        // Log.log(timetablesFromNow)
         return timetablesFromNow;
     },
-    checkRouteTime: function() {
+    checkRouteTime: function(timetables) {
         // this function checks any bus route departure times that is over
         // if so, update routeTimeTablesToDisplay and call updateRouteTimeDOM function
-        
-        // just a reminder, nullsafe!!
-        if (this.routeTimetablesToDisplay == {}) return;
+        Log.log("checkRouteTime called.");
+        let isTimePassed = false;
+        for (route in timetables) {
+            if (moment(timetables[route][0], "HHmm").isSameOrAfter(moment())) {
+                isTimePassed = true;
+            }
+        }
 
-
+        if (isTimePassed) {
+            this.updateRouteTimeDOM(this.getTimesFromNow(this.routeTimeTables, 3));
+        }
     },
     buildRouteTimeDOM: function() {
 
     },
-    updateRouteTimeDOM: function() {
-
+    updateRouteTimeDOM: function(timetables) {
+        Log.log("updateRouteTimeDOM called.");
+        Log.log(timetables);
     },
     socketNotificationReceived: function(notification, payload) {
         var self = this;
@@ -97,8 +106,8 @@ Module.register("MMM-ulsanBus_RouteDepartureTime", {
                 for (route in payload) {
                     this.routeTimeTables[route] = payload[route];
                 }
-                Log.log(this.routeTimeTables);
-                this.getTimesFromNow(this.routeTimeTables, 3);
+                // Log.log(this.routeTimeTables);
+               this.updateRouteTimeDOM(this.getTimesFromNow(this.routeTimeTables, 3));
                 break;
 		}
     },
