@@ -8,8 +8,6 @@ Module.register("MMM-ulsanBus_RouteDepartureTime", {
         var self = this;
         Log.log("Starting module: " + this.name);
         this.routeTimeTables = {};
-        this.routeTimetablesToDisplay = {};
-
     },
     getStyles: function() {
         return ["ulsanBus_RouteDepartureTime.css"];
@@ -30,7 +28,10 @@ Module.register("MMM-ulsanBus_RouteDepartureTime", {
                     self.sendSocketNotification("TIMETABLE_REQ", [self.config.key, routeNM, self.config.isVacation]);
                 })
 
-                setInterval(this.checkRouteTime(this.routeTimeTables), 1000);
+
+                self.departuretimeCheckTimer = setInterval( function() {
+                    self.checkRouteTime(self.getTimesFromNow(self.routeTimeTables, 3));
+                }, 5000);
                 break;
             case "CLOCK_MINUTE":
                 // 가장 최근 버스 출발시간과 현재 분을 비교해서 다음 시간 업데이트 여부 판독
@@ -81,10 +82,13 @@ Module.register("MMM-ulsanBus_RouteDepartureTime", {
         // this function checks any bus route departure times that is over
         // if so, update routeTimeTablesToDisplay and call updateRouteTimeDOM function
         Log.log("checkRouteTime called.");
+        Log.log(timetables)
         let isTimePassed = false;
         for (route in timetables) {
-            if (moment(timetables[route][0], "HHmm").isSameOrAfter(moment())) {
+            Log.log(moment().isSameOrAfter(moment(timetables[route][0], "HHmm")))
+            if (moment().isSameOrAfter(moment(timetables[route][0], "HHmm"))) {
                 isTimePassed = true;
+                break;
             }
         }
 
@@ -107,7 +111,7 @@ Module.register("MMM-ulsanBus_RouteDepartureTime", {
                     this.routeTimeTables[route] = payload[route];
                 }
                 // Log.log(this.routeTimeTables);
-               this.updateRouteTimeDOM(this.getTimesFromNow(this.routeTimeTables, 3));
+                this.updateRouteTimeDOM(this.getTimesFromNow(this.routeTimeTables, 3));
                 break;
 		}
     },
