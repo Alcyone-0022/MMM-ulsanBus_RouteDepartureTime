@@ -8,7 +8,7 @@ Module.register("MMM-ulsanBus_RouteDepartureTime", {
         var self = this;
         Log.log("Starting module: " + this.name);
         this.routeTimeTables = {};
-        this.routeTimeTablesToDisplay = {};
+        this.routeTimetablesToDisplay = {};
 
     },
     getStyles: function() {
@@ -42,9 +42,45 @@ Module.register("MMM-ulsanBus_RouteDepartureTime", {
                 break;
         }
     },
+    updateRouteTimetablesToDisplay: function(quantity) {
+        // this function updates routetimetablesToDisplay, (quantity) times from now
+
+        var self = this;
+
+        for (route in this.routeTimeTables) {
+            // departureTime == '1421(율리공영차고지 순환)'...
+            let tempRoute = {};
+			tempRoute[route] = [];
+
+			let cnt = 0;
+			this.routeTimeTables[route].forEach(function(time, idx) {
+				let current_moment = moment(time, "HHmm");
+				if (current_moment.isSameOrAfter(moment())) {
+					// if route departure time is same or after from now, push it into array.
+					if(idx <= self.routeTimeTables[route].length && cnt < quantity) {
+						if (self.routeTimetablesToDisplay[route] == undefined) {
+                            self.routeTimetablesToDisplay[route] = [];
+                        }
+
+                        if (!self.routeTimetablesToDisplay[route].includes(time)) {
+                            // prevent duplicate of route departure time
+                            self.routeTimetablesToDisplay[route].push(time);
+                        }
+						cnt += 1;
+					}
+				}
+			})
+        }
+        Log.log(this.routeTimetablesToDisplay)
+    },
     checkRouteTime: function() {
         // this function checks any bus route departure times that is over
         // if so, update routeTimeTablesToDisplay and call updateRouteTimeDOM function
+        
+        // just a reminder, nullsafe!!
+        if (this.routeTimetablesToDisplay == {}) return;
+
+
     },
     buildRouteTimeDOM: function() {
 
@@ -60,6 +96,7 @@ Module.register("MMM-ulsanBus_RouteDepartureTime", {
                     this.routeTimeTables[route] = payload[route];
                 }
                 Log.log(this.routeTimeTables);
+                this.updateRouteTimetablesToDisplay(3);
                 break;
 		}
     },
