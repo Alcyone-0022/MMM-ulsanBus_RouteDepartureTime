@@ -42,36 +42,38 @@ Module.register("MMM-ulsanBus_RouteDepartureTime", {
                 break;
         }
     },
-    updateRouteTimetablesToDisplay: function(quantity) {
-        // this function updates routetimetablesToDisplay, (quantity) times from now
+    getTimesFromNow: function(timetables, quantity) {
+        // this function gets departure times from now, in number of quantity
 
-        var self = this;
+        let self = this;
+        let timetablesFromNow = {};
 
-        for (route in this.routeTimeTables) {
+        for (route in timetables) {
             // departureTime == '1421(율리공영차고지 순환)'...
             let tempRoute = {};
 			tempRoute[route] = [];
 
 			let cnt = 0;
-			this.routeTimeTables[route].forEach(function(time, idx) {
+			timetables[route].forEach(function(time, idx) {
 				let current_moment = moment(time, "HHmm");
 				if (current_moment.isSameOrAfter(moment())) {
 					// if route departure time is same or after from now, push it into array.
 					if(idx <= self.routeTimeTables[route].length && cnt < quantity) {
-						if (self.routeTimetablesToDisplay[route] == undefined) {
-                            self.routeTimetablesToDisplay[route] = [];
+						if (timetablesFromNow[route] == undefined) {
+                            timetablesFromNow[route] = [];
                         }
 
-                        if (!self.routeTimetablesToDisplay[route].includes(time)) {
+                        if (!timetablesFromNow[route].includes(time)) {
                             // prevent duplicate of route departure time
-                            self.routeTimetablesToDisplay[route].push(time);
+                            timetablesFromNow[route].push(time);
                         }
 						cnt += 1;
 					}
 				}
 			})
         }
-        Log.log(this.routeTimetablesToDisplay)
+        Log.log(timetablesFromNow)
+        return timetablesFromNow;
     },
     checkRouteTime: function() {
         // this function checks any bus route departure times that is over
@@ -96,7 +98,7 @@ Module.register("MMM-ulsanBus_RouteDepartureTime", {
                     this.routeTimeTables[route] = payload[route];
                 }
                 Log.log(this.routeTimeTables);
-                this.updateRouteTimetablesToDisplay(3);
+                this.getTimesFromNow(this.routeTimeTables, 3);
                 break;
 		}
     },
