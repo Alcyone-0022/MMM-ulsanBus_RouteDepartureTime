@@ -99,11 +99,13 @@ Module.register("MMM-ulsanBus_RouteDepartureTime", {
         }
     },
     buildRouteTimeDOM: function() {
-
+        // TODO: html 구조 정의
     },
     updateRouteTimeDOM: function(timetables) {
         Log.log("updateRouteTimeDOM called.");
         // Log.log(timetables);
+        // TODO: for (route in timetables)
+        // appendchild (to container) buildRouteTimeDOM (per each routes)
     },
     socketNotificationReceived: function(notification, payload) {
         var self = this;
