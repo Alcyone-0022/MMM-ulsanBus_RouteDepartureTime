@@ -60,8 +60,8 @@ Module.register("MMM-ulsanBus_RouteDepartureTime", {
 
 			let cnt = 0;
 			timetables[route].forEach(function(time, idx) {
-				let current_moment = moment(time, "HHmm");
-				if (current_moment.isSameOrAfter(moment())) {
+				let currentRouteTime = moment(time, "HHmm");
+				if (currentRouteTime.isSameOrAfter(moment())) {
 					// if route departure time is same or after from now, push it into array.
 					if(idx <= self.routeTimeTables[route].length && cnt < quantity) {
 						if (timetablesFromNow[route] == undefined) {
