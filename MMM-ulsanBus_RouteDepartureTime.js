@@ -116,12 +116,6 @@ Module.register("MMM-ulsanBus_RouteDepartureTime", {
         }
         return routeContainer;
     },
-    updateRouteTimeDOM: function(timetables) {
-        Log.log("updateRouteTimeDOM called.");
-        let container = document.getElementsByClassName('UB_RteDepTime_Container')[0];
-        container.innerHTML = '';
-        container.appendChild(this.buildRouteTimeDOM(timetables));
-    },
     socketNotificationReceived: function(notification, payload) {
         var self = this;
         switch (notification) {
