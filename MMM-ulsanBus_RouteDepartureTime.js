@@ -18,6 +18,7 @@ Module.register("MMM-ulsanBus_RouteDepartureTime", {
         // var self = this;
         var container = document.createElement("div");
         container.className = "UB_RteDepTime_Container";
+        container.appendChild(this.buildRouteTimeDOM(this.currentTimeTables));
         Log.log(container);
         return container;
     },
@@ -29,7 +30,6 @@ Module.register("MMM-ulsanBus_RouteDepartureTime", {
                     Log.log("Requested route departure time: " + routeNM.toString());
                     self.sendSocketNotification("TIMETABLE_REQ", [self.config.key, routeNM, self.config.isVacation]);
                 })
-
 
                 self.departuretimeCheckTimer = setInterval( function() {
                     self.checkRouteTime(self.currentTimeTables);
@@ -76,7 +76,7 @@ Module.register("MMM-ulsanBus_RouteDepartureTime", {
         Log.log("checkRouteTime called.");
         let isTimePassed = false;
         for (route in timetables) {
-            Log.log(moment().isSameOrAfter(moment(timetables[route][0], "HHmm")))
+            // Log.log(moment().isSameOrAfter(moment(timetables[route][0], "HHmm")))
             if (moment().isSameOrAfter(moment(timetables[route][0], "HHmm"))) {
                 isTimePassed = true;
                 break;
@@ -85,17 +85,42 @@ Module.register("MMM-ulsanBus_RouteDepartureTime", {
 
         if (isTimePassed) {
             this.currentTimeTables = this.getTimesFromNow(this.routeTimeTables, 3);
-            this.updateRouteTimeDOM(this.currentTimeTables);
+            // this.updateRouteTimeDOM(this.currentTimeTables);
+            this.updateDom();
         }
     },
-    buildRouteTimeDOM: function() {
+    buildRouteTimeDOM: function(routeObj) {
         // TODO: html 구조 정의
+        let routeContainer = document.createElement('div');
+        routeContainer.className = 'routeContainer';
+
+        Log.log(routeObj)
+        for (route in routeObj) {
+            let routeElem = document.createElement('div');
+            routeElem.className = 'UB_RteDepTime_Route';
+            routeElem.id = 'route_' + route;
+
+            let routeName = document.createElement('p');
+            routeName.className = 'UB_RteDepTime_RouteName';
+            routeName.innerHTML = route;
+
+            routeObj[route].forEach((time, idx) => {
+                let depTime = document.createElement('span');
+                depTime.className = 'UB_RteDepTime_DepTime';
+                depTime.innerHTML = time;
+                routeName.appendChild(depTime);
+            })
+
+            routeElem.appendChild(routeName);
+            routeContainer.appendChild(routeElem);
+        }
+        return routeContainer;
     },
     updateRouteTimeDOM: function(timetables) {
         Log.log("updateRouteTimeDOM called.");
-        // Log.log(timetables);
-        // TODO: for (route in timetables)
-        // appendchild (to container) buildRouteTimeDOM (per each routes)
+        let container = document.getElementsByClassName('UB_RteDepTime_Container')[0];
+        container.innerHTML = '';
+        container.appendChild(this.buildRouteTimeDOM(timetables));
     },
     socketNotificationReceived: function(notification, payload) {
         var self = this;
@@ -105,7 +130,8 @@ Module.register("MMM-ulsanBus_RouteDepartureTime", {
                     this.routeTimeTables[route] = payload[route];
                 }
                 this.currentTimeTables = this.getTimesFromNow(this.routeTimeTables, 3);
-                this.updateRouteTimeDOM(this.currentTimeTables);
+                Log.log(this.currentTimeTables);
+                this.updateDom();
                 break;
 		}
     },
