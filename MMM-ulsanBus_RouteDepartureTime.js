@@ -110,9 +110,17 @@ Module.register("MMM-ulsanBus_RouteDepartureTime", {
             routeElem.className = 'UB_RteDepTime_Route';
             routeElem.id = 'route_' + route;
 
-            let routeName = document.createElement('div');
-            routeName.className = 'UB_RteDepTime_RouteName';
-            routeName.innerHTML = route;
+            // split route number and direction & remove braces
+            let routeNum = route.slice(0, route.indexOf('('));
+            let routeDirection = route.slice(route.indexOf('(') + 1, route.indexOf(')'));
+
+            let routeNumE = document.createElement('div');
+            routeNumE.className = 'UB_RteDepTime_RouteNum';
+            routeNumE.innerHTML = routeNum;
+
+            let routeDirectionE = document.createElement('div');
+            routeDirectionE.className = 'UB_RteDepTime_RouteDirection';
+            routeDirectionE.innerHTML = routeDirection;
 
             let routeTimeContainer = document.createElement('div');
             routeTimeContainer.className = 'UB_RteDepTime_RouteTimes';
@@ -124,7 +132,8 @@ Module.register("MMM-ulsanBus_RouteDepartureTime", {
                 routeTimeContainer.appendChild(depTime);
             })
 
-            routeElem.appendChild(routeName);
+            routeElem.appendChild(routeNumE);
+            routeElem.appendChild(routeDirectionE);
             routeElem.appendChild(routeTimeContainer);
             routeContainer.appendChild(routeElem);
         }
