@@ -4,6 +4,7 @@ Module.register("MMM-ulsanBus_RouteDepartureTime", {
 		busStopUpdateInterval: 10000,
 		isVacation: false,
         excludedRoutes: [],
+        displayDirection: true,
     },
     start: function() {
         var self = this;
@@ -137,7 +138,9 @@ Module.register("MMM-ulsanBus_RouteDepartureTime", {
 
             let routeNumberContainer = document.createElement('div');
             routeNumberContainer.className = "UB_RteDepTime_RouteNumberContainer"
-            routeNumberContainer.appendChild(routeDirectionE);
+            if(this.config.displayDirection) {
+                routeNumberContainer.appendChild(routeDirectionE);
+            }
             routeNumberContainer.appendChild(routeNumE);
 
             let routeTimeContainer = document.createElement('div');
