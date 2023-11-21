@@ -136,6 +136,7 @@ Module.register("MMM-ulsanBus_RouteDepartureTime", {
             routeDirectionE.innerHTML = routeDirection;
 
             let routeNumberContainer = document.createElement('div');
+            routeNumberContainer.className = "UB_RteDepTime_RouteNumberContainer"
             routeNumberContainer.appendChild(routeNumE);
             routeNumberContainer.appendChild(routeDirectionE);
 
