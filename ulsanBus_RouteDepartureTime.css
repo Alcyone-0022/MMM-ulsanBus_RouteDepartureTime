@@ -28,15 +28,16 @@
 
 .UB_RteDepTime_RouteNum {
     display: inline-block;
-    margin-right: 0.5em;
+    margin-right: 0.2em;
     width: 22%;
     font-weight: 600;
 }
 
 .UB_RteDepTime_RouteDirection {
     font-size: small;
-    /* color: white; */
-    line-height: 30px;
+    color: white;
+    line-height: 33px;
+    margin-right: 0.2em;
 }
 
 .UB_RteDepTime_RouteTimes{
