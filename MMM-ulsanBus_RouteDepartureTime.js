@@ -114,13 +114,30 @@ Module.register("MMM-ulsanBus_RouteDepartureTime", {
             let routeNum = route.slice(0, route.indexOf('('));
             let routeDirection = route.slice(route.indexOf('(') + 1, route.indexOf(')'));
 
-            let routeNumE = document.createElement('div');
+            let routeNumE = document.createElement('span');
             routeNumE.className = 'UB_RteDepTime_RouteNum';
             routeNumE.innerHTML = routeNum;
 
-            let routeDirectionE = document.createElement('div');
+            // set route color
+            if (routeNum < 100) { // 마을버스
+                routeNumE.style.color = '#00fb00';
+            } else if (routeNum < 899) { //시내버스
+                routeNumE.style.color = '#FFCC00';
+            } else if (routeNum < 999) { //지선버스
+                routeNumE.style.color = '#00FFFD';
+            } else if (routeNum < 1999) { //좌석버스
+                routeNumE.style.color = '#3380ff';
+            } else if (routeNum < 5999) { //급행버스
+                routeNumE.style.color = '#ff5733';
+            }
+
+            let routeDirectionE = document.createElement('span');
             routeDirectionE.className = 'UB_RteDepTime_RouteDirection';
             routeDirectionE.innerHTML = routeDirection;
+
+            let routeNumberContainer = document.createElement('div');
+            routeNumberContainer.appendChild(routeNumE);
+            routeNumberContainer.appendChild(routeDirectionE);
 
             let routeTimeContainer = document.createElement('div');
             routeTimeContainer.className = 'UB_RteDepTime_RouteTimes';
@@ -132,8 +149,7 @@ Module.register("MMM-ulsanBus_RouteDepartureTime", {
                 routeTimeContainer.appendChild(depTime);
             })
 
-            routeElem.appendChild(routeNumE);
-            routeElem.appendChild(routeDirectionE);
+            routeElem.appendChild(routeNumberContainer);
             routeElem.appendChild(routeTimeContainer);
             routeContainer.appendChild(routeElem);
         }
