@@ -149,7 +149,7 @@ Module.register("MMM-ulsanBus_RouteDepartureTime", {
             routeObj[route].forEach((time, idx) => {
                 let depTime = document.createElement('span');
                 depTime.className = 'UB_RteDepTime_DepTime';
-                depTime.innerHTML = time;
+                depTime.innerHTML = time.substring(0,2) + ':' + time.substring(2,4);
 
                 if (idx == 0) {
                     depTime.style.color = "white";
