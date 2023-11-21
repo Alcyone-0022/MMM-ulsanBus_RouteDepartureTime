@@ -147,6 +147,13 @@ Module.register("MMM-ulsanBus_RouteDepartureTime", {
                 let depTime = document.createElement('span');
                 depTime.className = 'UB_RteDepTime_DepTime';
                 depTime.innerHTML = time;
+
+                if (idx == 0) {
+                    depTime.style.color = "white";
+                } else {
+                    let col = 255 - (65 * idx);
+                    depTime.style.color = `rgb(${col}, ${col}, ${col})`;
+                }
                 routeTimeContainer.appendChild(depTime);
             })
 
