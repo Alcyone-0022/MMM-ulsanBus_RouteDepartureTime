@@ -1,15 +1,33 @@
 .UB_RteDepTime_Container {
+    /* display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: space-evenly; */
+}
 
+.routeContainer {
+    /* display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: space-evenly; */
 }
 
 .UB_RteDepTime_Route {
-
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
 }
 
 .UB_RteDepTime_RouteName {
+    display: inline-block;
+    margin-right: 0.5em;
+}
 
+.UB_RteDepTime_RouteTimes{
+    display: inline-block;
 }
 
 .UB_RteDepTime_DepTime {
-    
+    margin-right: 0.3em;
 }

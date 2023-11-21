@@ -3,6 +3,7 @@ Module.register("MMM-ulsanBus_RouteDepartureTime", {
 		updateInterval: 30000,
 		busStopUpdateInterval: 10000,
 		isVacation: false,
+        excludedRoutes: [],
     },
     start: function() {
         var self = this;
@@ -44,6 +45,16 @@ Module.register("MMM-ulsanBus_RouteDepartureTime", {
         let timetablesFromNow = {};
 
         for (route in timetables) {
+            // don't add route if explicitly excluded in setting
+            let isExcluded = false;
+            self.config.excludedRoutes.forEach(function(direction) {
+                if (route.includes(direction)) {
+                    isExcluded = true;
+                }
+            })
+            if (isExcluded) continue;
+
+
             // departureTime == '1421(율리공영차고지 순환)'...
             let tempRoute = {};
 			tempRoute[route] = [];
@@ -90,7 +101,6 @@ Module.register("MMM-ulsanBus_RouteDepartureTime", {
         }
     },
     buildRouteTimeDOM: function(routeObj) {
-        // TODO: html 구조 정의
         let routeContainer = document.createElement('div');
         routeContainer.className = 'routeContainer';
 
@@ -100,18 +110,22 @@ Module.register("MMM-ulsanBus_RouteDepartureTime", {
             routeElem.className = 'UB_RteDepTime_Route';
             routeElem.id = 'route_' + route;
 
-            let routeName = document.createElement('p');
+            let routeName = document.createElement('div');
             routeName.className = 'UB_RteDepTime_RouteName';
             routeName.innerHTML = route;
+
+            let routeTimeContainer = document.createElement('div');
+            routeTimeContainer.className = 'UB_RteDepTime_RouteTimes';
 
             routeObj[route].forEach((time, idx) => {
                 let depTime = document.createElement('span');
                 depTime.className = 'UB_RteDepTime_DepTime';
                 depTime.innerHTML = time;
-                routeName.appendChild(depTime);
+                routeTimeContainer.appendChild(depTime);
             })
 
             routeElem.appendChild(routeName);
+            routeElem.appendChild(routeTimeContainer);
             routeContainer.appendChild(routeElem);
         }
         return routeContainer;
@@ -124,7 +138,6 @@ Module.register("MMM-ulsanBus_RouteDepartureTime", {
                     this.routeTimeTables[route] = payload[route];
                 }
                 this.currentTimeTables = this.getTimesFromNow(this.routeTimeTables, 3);
-                Log.log(this.currentTimeTables);
                 this.updateDom();
                 break;
 		}
