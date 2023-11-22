@@ -21,7 +21,6 @@ Module.register("MMM-ulsanBus_RouteDepartureTime", {
         var container = document.createElement("div");
         container.className = "UB_RteDepTime_Container";
         container.appendChild(this.buildRouteTimeDOM(this.currentTimeTables));
-        Log.log(container);
         return container;
     },
     notificationReceived: function(notification, payload) {
@@ -116,7 +115,7 @@ Module.register("MMM-ulsanBus_RouteDepartureTime", {
         let routeContainer = document.createElement('div');
         routeContainer.className = 'routeContainer';
 
-        Log.log(routeObj)
+        // Log.log(routeObj)
         for (route in routeObj) {
             let routeElem = document.createElement('div');
             routeElem.className = 'UB_RteDepTime_Route';
