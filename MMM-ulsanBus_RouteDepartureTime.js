@@ -35,6 +35,7 @@ Module.register("MMM-ulsanBus_RouteDepartureTime", {
 
                 self.departuretimeCheckTimer = setInterval( function() {
                     self.checkRouteTime(self.currentTimeTables);
+                    // TODO: Check if the day has passed and so request new timetable
                 }, 5000);
                 break;
         }
@@ -152,8 +153,10 @@ Module.register("MMM-ulsanBus_RouteDepartureTime", {
                 depTime.innerHTML = time.substring(0,2) + ':' + time.substring(2,4);
 
                 if (idx == 0) {
+                    // the first departure time
                     depTime.style.color = "white";
                 } else {
+                    // fade color to grey
                     let col = 255 - (65 * idx);
                     depTime.style.color = `rgb(${col}, ${col}, ${col})`;
                 }
@@ -170,11 +173,18 @@ Module.register("MMM-ulsanBus_RouteDepartureTime", {
         var self = this;
         switch (notification) {
             case "TIMETABLE_RECV":
-                for (route in payload) {
-                    this.routeTimeTables[route] = payload[route];
+                // TODO: Handle Error
+                if (payload.hasOwnProperty('Error')) {
+                    setTimeout(() => {
+                        self.sendSocketNotification("TIMETABLE_REQ", [self.config.key, routeNM, self.config.isVacation]);
+                    }, 60000);
+                } else {
+                    for (route in payload) {
+                        this.routeTimeTables[route] = payload[route];
+                    }
+                    this.currentTimeTables = this.getTimesFromNow(this.routeTimeTables, 3);
+                    this.updateDom();
                 }
-                this.currentTimeTables = this.getTimesFromNow(this.routeTimeTables, 3);
-                this.updateDom();
                 break;
 		}
     },
