@@ -11,15 +11,7 @@ module.exports = NodeHelper.create({
 	notificationReceived: function() {},
 	socketNotificationReceived: async function(notification, payload) {
 		switch(notification){
-			// case 'ROUTEDEPARTURETIME_MODULE_READY':
-			// 	// when module loaded completely, get holiday information
-			// 	console.log("ROUTEDEPARTURETIME_MODULE_READY");
-			// 	holidays = await this.getHolidayTable(payload)
-			// 		.then(this.sendSocketNotification("ROUTEDEPARTURETIME_NODEHELPER_READY"));
-			// 	break;
 			case 'TIMETABLE_REQ':
-				// 그냥 전체 timetable 넘겨버리고 선택해서 사용하는 건 브라우저 사이드에서 처리하면
-				// 여기서 holiday 업데이트도 하면 될 것
 				holidays = await this.getHolidayTable(payload);
 				let obj = await this.getTimeTable(payload[0], payload[1], payload[2]);
 				this.sendSocketNotification('TIMETABLE_RECV', obj);
@@ -84,31 +76,6 @@ module.exports = NodeHelper.create({
 			}
 			routes[val.ROUTENAME[0]].push(val.TIME[0]);
 		})
-
-		/*
-		// remove all times except 3 from now
-		let route_departureTime = [];
-		Object.keys(routes).forEach(function(route) {
-			let tempRoute = {};
-			tempRoute[route] = [];
-
-			let cnt = 0;
-			routes[route].forEach(function(time, idx) {
-				let current_moment = moment(time, "HHmm");
-				if (current_moment.isSameOrAfter(moment())) {
-					// if route departure time is same or after from now, push it into array.
-					if(idx <= routes[route].length && cnt < 3) {
-						//prevent out of range
-						tempRoute[route].push(time);
-						cnt += 1;
-					}
-				}
-			})
-			route_departureTime.push(tempRoute);
-		})
-
-		return route_departureTime;
-		*/
 		return routes;
 	},
 	async getTimeTable(key, routeNumber, isVacation){
