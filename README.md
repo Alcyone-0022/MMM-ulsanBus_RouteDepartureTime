@@ -9,15 +9,15 @@ MM2 module displays ulsan bus departure time, using ulsan bus information system
 ## Embedding MMM-ulsanBus_RouteDepartureTime
 ``` JS
 {
-			module: "MMM-ulsanBus_RouteDepartureTime",
-			position: "top_center",
-			config: {
-				key: 'YOUR_KEY_HERE',
-				routes: [124, 1421],
-				excludedRoutes: ["124(율리공영차고지종점 방면)"],
-				displayDirection: true,
-			}
-		},
+  module: "MMM-ulsanBus_RouteDepartureTime",
+  position: "top_center",
+  config: {
+    key: 'YOUR_KEY_HERE',
+    routes: [124, 1421],
+    excludedRoutes: ["124(율리공영차고지종점 방면)"],
+    displayDirection: true,
+  }
+},
 ```
    
 ## Settings
