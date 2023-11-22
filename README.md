@@ -17,6 +17,7 @@ git clone https://github.com/ExyKnox/MMM-ulsanBus_RouteDepartureTime.git
 cd MMM-ulsanBus_RouteDepartureTime
 npm install
 ```
+config.js
 ``` JS
 {
   module: "MMM-ulsanBus_RouteDepartureTime",
