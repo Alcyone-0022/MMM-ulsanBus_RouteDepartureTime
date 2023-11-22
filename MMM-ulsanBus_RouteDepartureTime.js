@@ -67,18 +67,20 @@ Module.register("MMM-ulsanBus_RouteDepartureTime", {
 
 
             // departureTime == '1421(율리공영차고지 순환)'...
-            let tempRoute = {};
-			tempRoute[route] = [];
+            // let tempRoute = {};
+			// tempRoute[route] = [];
 
 			let cnt = 0;
 			timetables[route].forEach(function(time, idx) {
+                // Add route even no departure time exsists
+                if (timetablesFromNow[route] == undefined) {
+                    timetablesFromNow[route] = [];
+                }
+
 				let currentRouteTime = moment(time, "HHmm");
 				if (currentRouteTime.isSameOrAfter(moment())) {
 					// if route departure time is same or after from now, push it into array.
 					if(idx <= self.routeTimeTables[route].length && cnt < quantity) {
-						if (timetablesFromNow[route] == undefined) {
-                            timetablesFromNow[route] = [];
-                        }
 
                         if (!timetablesFromNow[route].includes(time)) {
                             // prevent duplicate of route departure time
@@ -155,23 +157,32 @@ Module.register("MMM-ulsanBus_RouteDepartureTime", {
 
             let routeTimeContainer = document.createElement('div');
             routeTimeContainer.className = 'UB_RteDepTime_RouteTimes';
-
-            routeObj[route].forEach((time, idx) => {
+            
+            // If no timetable, display "no departure infomation"
+            if (routeObj[route].length !== 0) {
+                routeObj[route].forEach((time, idx) => {
+                    let depTime = document.createElement('span');
+                    depTime.className = 'UB_RteDepTime_DepTime';
+                    depTime.innerHTML = time.substring(0,2) + ':' + time.substring(2,4);
+    
+                    if (idx == 0) {
+                        // the first departure time
+                        depTime.style.color = "white";
+                    } else {
+                        // fade color to grey
+                        let col = 255 - (65 * idx);
+                        depTime.style.color = `rgb(${col}, ${col}, ${col})`;
+                    }
+                    routeTimeContainer.appendChild(depTime);
+                })
+            } else {
                 let depTime = document.createElement('span');
                 depTime.className = 'UB_RteDepTime_DepTime';
-                depTime.innerHTML = time.substring(0,2) + ':' + time.substring(2,4);
-
-                if (idx == 0) {
-                    // the first departure time
-                    depTime.style.color = "white";
-                } else {
-                    // fade color to grey
-                    let col = 255 - (65 * idx);
-                    depTime.style.color = `rgb(${col}, ${col}, ${col})`;
-                }
+                depTime.innerHTML = "출발정보 없음";
+                depTime.style.color = "grey";
                 routeTimeContainer.appendChild(depTime);
-            })
-
+            }
+            
             routeElem.appendChild(routeNumberContainer);
             routeElem.appendChild(routeTimeContainer);
             routeContainer.appendChild(routeElem);
