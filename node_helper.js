@@ -54,7 +54,7 @@ module.exports = NodeHelper.create({
 	},
 	isHoliday: function() {
 		let nowDate = moment().get('year').toString() + moment().get('month').toString() + moment().get('date').toString();
-		if (Object.hasOwn(holidays, nowDate)) {
+		if (holidays.hasOwnProperty(nowDate)) {
 			return true;
 		} else {
 			return false;
