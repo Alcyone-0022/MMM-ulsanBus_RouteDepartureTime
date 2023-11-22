@@ -23,13 +23,15 @@
     width: 100%;
     display: flex;
     flex-direction: row;
-    justify-content: flex-start;
+    justify-content: flex-end;
 }
 
 .UB_RteDepTime_RouteNum {
     display: inline-block;
+    width: 26%;
     margin-right: 0.2em;
-    width: 22%;
+    margin-left: 0.1em;
+    text-align: right;
     font-weight: 600;
 }
 
@@ -37,7 +39,6 @@
     font-size: small;
     color: white;
     line-height: 33px;
-    margin-right: 0.2em;
 }
 
 .UB_RteDepTime_RouteTimes{
