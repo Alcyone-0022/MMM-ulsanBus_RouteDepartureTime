@@ -12,6 +12,11 @@ https://www.data.go.kr/tcs/dss/selectApiDataDetailView.do?publicDataPk=15012690
 https://www.data.go.kr/tcs/dss/selectApiDataDetailView.do?publicDataPk=15052669   
 
 ## Embedding MMM-ulsanBus_RouteDepartureTime
+```shell
+git clone https://github.com/ExyKnox/MMM-ulsanBus_RouteDepartureTime.git
+cd MMM-ulsanBus_RouteDepartureTime
+npm install
+```
 ``` JS
 {
   module: "MMM-ulsanBus_RouteDepartureTime",
