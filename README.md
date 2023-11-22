@@ -2,9 +2,14 @@
 
 ![ulsanBus_RouteDepartureTimeEx.png](/ulsanBus_RouteDepartureTimeEx.png)         
 
-https://www.data.go.kr/tcs/dss/selectApiDataDetailView.do?publicDataPk=15052669   
 울산광역시 BIS 정보 API를 이용한 울산 버스 출발시간 표시 모듈입니다.   
 MM2 module displays ulsan bus departure time, using ulsan bus information system API.
+
+## 활용요청 필요한 API들
+한국천문연구원 특일 정보 (평일/공휴일 판단에 필요)   
+https://www.data.go.kr/iim/api/selectAPIAcountView.do   
+울산광역시 BIS 정보   
+https://www.data.go.kr/tcs/dss/selectApiDataDetailView.do?publicDataPk=15052669   
 
 ## Embedding MMM-ulsanBus_RouteDepartureTime
 ``` JS
