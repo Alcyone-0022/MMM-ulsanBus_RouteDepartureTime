@@ -28,17 +28,27 @@ Module.register("MMM-ulsanBus_RouteDepartureTime", {
         var self = this;
         switch (notification) {
             case "DOM_OBJECTS_CREATED":
-                self.config.routes.forEach(function(routeNM) {
-                    Log.log("Requested route departure time: " + routeNM.toString());
-                    self.sendSocketNotification("TIMETABLE_REQ", [self.config.key, routeNM, self.config.isVacation]);
-                })
+                self.requestTimeTable(self.config.routes);
 
+                let prevDate = moment();
                 self.departuretimeCheckTimer = setInterval( function() {
                     self.checkRouteTime(self.currentTimeTables);
-                    // TODO: Check if the day has passed and so request new timetable
-                }, 5000);
+                    // Check if the day has passed, and so, request new timetable
+                    if (moment().diff(prevDate, "days") > 0) {
+                        Log.log("A day elapsed. request new timetable...")
+                        prevDate = moment();
+                        self.requestTimeTable(self.config.routes);
+                    }
+                }, 60000);
                 break;
         }
+    },
+    requestTimeTable: function(routes) {
+        let self = this;
+        routes.forEach(function(routeNM) {
+            Log.log("Requested route departure time: " + routeNM.toString());
+            self.sendSocketNotification("TIMETABLE_REQ", [self.config.key, routeNM, self.config.isVacation]);
+        })
     },
     getTimesFromNow: function(timetables, quantity) {
         // this function gets departure times from now, in number of quantity
@@ -173,10 +183,10 @@ Module.register("MMM-ulsanBus_RouteDepartureTime", {
         var self = this;
         switch (notification) {
             case "TIMETABLE_RECV":
-                // TODO: Handle Error
                 if (payload.hasOwnProperty('Error')) {
+                    Log.log(payload);
                     setTimeout(() => {
-                        self.sendSocketNotification("TIMETABLE_REQ", [self.config.key, routeNM, self.config.isVacation]);
+                        self.requestTimeTable(self.config.routes);
                     }, 60000);
                 } else {
                     for (route in payload) {
