@@ -30,6 +30,9 @@ Module.register("MMM-ulsanBus_RouteDepartureTime", {
                 self.requestTimeTable(self.config.routes);
 
                 let prevDate = moment();
+                // to diff with start of the day, set hour and minute to 0
+                prevDate.hour(0);
+                prevDate.minute(0);
                 self.departuretimeCheckTimer = setInterval( function() {
                     self.checkRouteTime(self.currentTimeTables);
                     // Check if the day has passed, and so, request new timetable
