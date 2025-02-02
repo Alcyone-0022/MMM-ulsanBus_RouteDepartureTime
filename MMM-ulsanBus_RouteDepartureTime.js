@@ -135,19 +135,29 @@ Module.register("MMM-ulsanBus_RouteDepartureTime", {
             routeNumE.innerHTML = routeNum;
 
             // set route color
-            if (routeNum < 100) { // 마을버스
-                routeNumE.style.color = '#00fb00';
-            } else if (routeNum < 899) { //시내버스
-                routeNumE.style.color = '#FFCC00';
-            // } else if (routeNum < 999) { //지선버스
-            //     routeNumE.style.color = '#00FFFD';
-            } else if (routeNum < 1999) { //좌석버스
-                routeNumE.style.color = '#3380ff';
-            } else if (routeNum < 5999) { //급행버스
-                routeNumE.style.color = '#ff5733';
-            } else { // 지선, 순환버스 (2024년 울산버스 개편에 따름)
-		routeNumE.style.color = '#FFCC00';
-	    }
+            if (!isNaN(routeNum)){
+                if (routeNum < 100) { // 마을버스
+                    routeNumE.style.color = '#00fb00';
+                } else if (routeNum < 899) { //시내버스
+                    routeNumE.style.color = '#FFCC00';
+                } else if (routeNum < 1999) { //좌석버스
+                    routeNumE.style.color = '#3380ff';
+                } else if (routeNum < 5999) { //급행버스
+                    routeNumE.style.color = '#ff5733';
+                }
+            } else {
+                let routeToInt = parseInt(routeNumE.slice(-2));
+
+                if (routeNumE.slice(0, 2) == "순환") {
+                    routeNumE.style.color = '#FFBC00';
+                }else if (routeToInt < 50) { // 지선버스
+                    routeNumE.style.color = '#00FFFD';
+                } else if (routeToInt < 80) { // 마을버스
+                    routeNumE.style.color = '#99CC66';
+                } else if (routeToInt < 100) { // 마실버스
+                    routeNumE.style.color = '#FFBC00';
+                }
+            }
 
             let routeDirectionE = document.createElement('span');
             routeDirectionE.className = 'UB_RteDepTime_RouteDirection';
