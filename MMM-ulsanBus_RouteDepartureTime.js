@@ -146,7 +146,7 @@ Module.register("MMM-ulsanBus_RouteDepartureTime", {
                     routeNumE.style.color = '#ff5733';
                 }
             } else {
-                let routeToInt = parseInt(routeNumE.slice(-2));
+                let routeToInt = parseInt(routeNum.slice(-2));
 
                 if (routeNum.slice(0, 2) == "순환") {
                     routeNumE.style.color = '#FFBC00';
