@@ -139,13 +139,15 @@ Module.register("MMM-ulsanBus_RouteDepartureTime", {
                 routeNumE.style.color = '#00fb00';
             } else if (routeNum < 899) { //시내버스
                 routeNumE.style.color = '#FFCC00';
-            } else if (routeNum < 999) { //지선버스
-                routeNumE.style.color = '#00FFFD';
+            // } else if (routeNum < 999) { //지선버스
+            //     routeNumE.style.color = '#00FFFD';
             } else if (routeNum < 1999) { //좌석버스
                 routeNumE.style.color = '#3380ff';
             } else if (routeNum < 5999) { //급행버스
                 routeNumE.style.color = '#ff5733';
-            }
+            } else { // 지선, 순환버스 (2024년 울산버스 개편에 따름)
+		routeNumE.style.color = '#FFCC00';
+	    }
 
             let routeDirectionE = document.createElement('span');
             routeDirectionE.className = 'UB_RteDepTime_RouteDirection';
