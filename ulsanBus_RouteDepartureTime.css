@@ -6,10 +6,7 @@
 }
 
 .routeContainer {
-    /* display: flex;
-    flex-wrap: wrap;
-    flex-direction: column;
-    justify-content: space-evenly; */
+    margin-right: 2em;
 }
 
 .UB_RteDepTime_Route {
@@ -20,7 +17,7 @@
 }
 
 .UB_RteDepTime_RouteNumberContainer {
-    width: 100%;
+    width: 95%;
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
@@ -42,7 +39,10 @@
 }
 
 .UB_RteDepTime_RouteTimes{
-    display: inline-block;
+    display: flex;
+    width: 15em;
+    flex-direction: row;
+    justify-content: flex-end;
 }
 
 .UB_RteDepTime_DepTime {
