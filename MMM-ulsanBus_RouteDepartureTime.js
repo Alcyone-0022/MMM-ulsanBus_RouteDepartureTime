@@ -148,7 +148,7 @@ Module.register("MMM-ulsanBus_RouteDepartureTime", {
             } else {
                 let routeToInt = parseInt(routeNumE.slice(-2));
 
-                if (routeNumE.slice(0, 2) == "순환") {
+                if (routeNum.slice(0, 2) == "순환") {
                     routeNumE.style.color = '#FFBC00';
                 }else if (routeToInt < 50) { // 지선버스
                     routeNumE.style.color = '#00FFFD';
